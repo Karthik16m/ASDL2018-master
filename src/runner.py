@@ -7,26 +7,33 @@ from random import randint
 ## START of part that students may change
 from code_completion_baseline import Code_Completion_Baseline
 
-training_dir = "E:\Darmstadt\Summer 2018\Deep Learning\ASDL2018-master\programs_800"
-query_dir = "E:\Darmstadt\Summer 2018\Deep Learning\ASDL2018-master\programs_200"
+#import the class Code_Completion_Baseline from code_completion_baseline.py
+
+training_dir = "./programs_800"
+query_dir = "./programs_200"
 
 model_file = "./trained_model"
 use_stored_model = False
 
-max_hole_size = 2
+max_hole_size = 3
 simplify_tokens = True
 ## END of part that students may change
 #########################################
 
 def simplify_token(token):
     if token["type"] == "Identifier":
-        token["value"] = "ID"
+       token["value"] = "ID"
     elif token["type"] == "String":
         token["value"] = "\"STR\""
     elif token["type"] == "RegularExpression":
         token["value"] = "/REGEXP/"
     elif token["type"] == "Numeric":
         token["value"] = "5"
+    #remove begin
+    #adding a new token classification
+    #elif token["type"] == "Keywords":
+    #   token ["value"] = "KEY"
+    #remove end
 
 # load sequences of tokens from files
 def load_tokens(token_dir):
@@ -59,7 +66,9 @@ def same_tokens(tokens1, tokens2):
 
 #########################################
 ## START of part that students may change
+
 code_completion = Code_Completion_Baseline()
+
 ## END of part that students may change
 #########################################
 
@@ -78,8 +87,27 @@ for tokens in query_token_lists:
     completion = code_completion.query(prefix, suffix)
     if same_tokens(completion, expected):
         correct += 1
+        #***************************************************************************remove begin
+        print("Correct")
+        # printing the expected and predicted tokens for correct values
+        # print("Expected token:" + str(expected))
+        # print("Predicted token: " + str(completion))
+        #***************************************************************************remove end
     else:
         incorrect += 1
+        #***************************************************************************remove begin
+        print("Incorrect")
+        #print("Prefix" + str(prefix[-1]))
+        #print("Suffix" + str(suffix[0]))
+        # writing the expected and predicted incorrect tokens to a file
+        file = open('./incorrectexptokenfile.txt', 'a')
+        file.write("Expected:""\n".join(map(lambda x: str(x), expected)))
+        file = open('./incorrectpredicttokenfile.txt', 'a')
+        file.write("Predicted:""\n".join(map(lambda x: str(x), completion)))
+        #printing the expected and predicted tokens for incorrect values
+        # print("Expected token:" + str(expected))
+        # print("Predicted token: " + str(completion))
+        #***************************************************************************remove end
 accuracy = correct / (correct + incorrect)
 print("Accuracy: " + str(correct) + " correct vs. " + str(incorrect) + " incorrect = "  + str(accuracy))
 

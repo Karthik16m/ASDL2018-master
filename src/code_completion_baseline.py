@@ -24,6 +24,15 @@ class Code_Completion_Baseline:
         all_token_strings = list(all_token_strings)
         all_token_strings.sort()
         print("Unique tokens: " + str(len(all_token_strings)))
+        #***************************************************************************remove begin
+        #writing the tokens to a file
+        file = open('./tokenfile.txt', 'w')
+        file.write("\n".join(map(lambda x: str(x), all_token_strings)))
+        # file.write(str(all_token_strings)'\n')
+        # Listing the set of Unique Tokens
+        #print("Token List:")
+        #print(*all_token_strings, sep='\n')
+        #*************************************************************************remove end
         self.string_to_number = dict()
         self.number_to_string = dict() 
         max_number = 0
@@ -46,14 +55,26 @@ class Code_Completion_Baseline:
         print("x,y pairs: " + str(len(xs)))        
         return (xs, ys)
 
+    # create_network - 1 hidden Layer -Accuracy = 0.18
+    #def create_network(self):
+    #   self.net = tflearn.input_data(shape=[None, len(self.string_to_number)])
+    #   self.net = tflearn.fully_connected(self.net, 32)
+    #   self.net = tflearn.fully_connected(self.net, len(self.string_to_number), activation='softmax')
+    #   self.net = tflearn.regression(self.net)
+    #   self.model = tflearn.DNN(self.net)
+
+# create_network - 3 hidden Layer configuration, Accuracy =
     def create_network(self):
         self.net = tflearn.input_data(shape=[None, len(self.string_to_number)])
+        self.net = tflearn.fully_connected(self.net, 32)
         self.net = tflearn.fully_connected(self.net, 32)
         self.net = tflearn.fully_connected(self.net, 32)
         self.net = tflearn.fully_connected(self.net, len(self.string_to_number), activation='softmax')
         self.net = tflearn.regression(self.net)
         self.model = tflearn.DNN(self.net)
-    
+
+
+
     def load(self, token_lists, model_file):
         self.prepare_data(token_lists)
         self.create_network()
